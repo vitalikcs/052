@@ -1,0 +1,15 @@
+Vagrant.configure("2") do |config|
+   config.vm.define "node1" do |subconfig|
+    subconfig.vm.box = "ubuntu/bionic64"
+    #subconfig.vm.network "private_network", ip: "192.168.50.10"
+    subconfig.vm.network "forwarded_port", guest: 80, host: 8080
+    subconfig.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y apache2
+      SHELL
+  end
+  config.vm.define "node2" do |subconfig|
+    subconfig.vm.box = "centos/7"
+    #subconfig.vm.network "private_network", ip: "192.168.50.11"
+  end
+end
