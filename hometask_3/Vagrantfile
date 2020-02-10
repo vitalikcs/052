@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.network "forwarded_port", guest: 3306, host: 3306
+  config.vm.network "forwarded_port", guest: 8090, host: 8080
+  config.vm.provision "file", source: "./atlassian-confluence-7.3.1-x64.bin", destination: "$HOME/atlassian-confluence-7.3.1-x64.bin"
+  config.vm.provision "file", source: "./response.varfile", destination: "$HOME/response.varfile"
+  config.vm.provision "file", source: "./dbs.sh", destination: "$HOME/dbs.sh"
+   config.vm.provider "virtualbox" do |vb|
+     vb.memory = "2048"
+   end
+   config.vm.provision "shell", inline: <<-SHELL
+     #!/bin/bash
+    pwd
+    ls
+    chmod a+x /home/vagrant/atlassian-confluence-7.3.1-x64.bin
+    /home/vagrant/atlassian-confluence-7.3.1-x64.bin -q -varfile response.varfile
+    chmod 700 dbs.sh
+    /home/vagrant/dbs.sh
+    mysql -h localhost -uroot -p'123456' -e 'CREATE DATABASE CONFLUENCE;'
+    SHELL
+end

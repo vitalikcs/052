@@ -1,0 +1,7 @@
+app.install.service$Boolean=true
+existingInstallationDir=/usr/local/Confluence
+launch.application$Boolean=true
+sys.adminRights$Boolean=true
+sys.confirmedUpdateInstallationString=false
+sys.installationDir=/opt/atlassian/confluence
+sys.languageId=en
