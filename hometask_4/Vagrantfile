@@ -14,5 +14,6 @@ Vagrant.configure("2") do |config|
     sh get-docker.sh 
     docker run -i -t -d --name mydatabase -p 3306:3306 vitalikcs/myimgs:mysqldb
     docker run -i -t -d --name wpapache007 -p 80:80 vitalikcs/myimgs:mywp
+    docker exec -it mydatabase mysql -uroot -p'123456' -e 'CREATE DATABASE wordpress;'
    SHELL
 end
