@@ -1,0 +1,18 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 3306, host: 3306
+  #config.vm.provision "file", source: "db/dbs1.sh", destination: "$HOME/db/dbs1.sh"
+  #config.vm.provision "file", source: "db/Dockerfile", destination: "$HOME/db/Dockerfile"
+  config.vm.provision "file", source: "wp/Dockerfile", destination: "$HOME/wp/Dockerfile"
+   config.vm.provider "virtualbox" do |vb|
+     vb.memory = "2048"
+   end
+   config.vm.provision "shell", inline: <<-SHELL
+    #!/bin/bash
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sh get-docker.sh 
+    docker run -i -t -d --name mydatabase -p 3306:3306 vitalikcs/myimgs:mysqldb
+    docker run -i -t -d --name wpapache007 -p 80:80 vitalikcs/myimgs:mywp
+   SHELL
+end
